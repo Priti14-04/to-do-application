@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo Application</title>
+    <style>
+        .add-task-container{
+            position: fixed;
+            bottom: 0;
+            right:0;
+            left:0;
+            background-color: black;
+            width:100%;
+            height: 100px;
+        }
+        .task-input{
+            padding: 10px;
+            margin: 15px;
+           
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>ToDo App</h1>
+    <div class="todo-list" id="todo-list"></div>
+
+    <div class="add-task-container">
+    <input type="text" id="task" class="task-input">
+    <select  id="priority">
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+    </select>
+    <button onclick="addTask()">Add Task</button>
+    <script>
+        let task=[];
+        function addTask(){
+            const inputTask = document.getElementById("task");
+            const inputPriority = document.getElementById("priority");
+
+            const newTask={
+                task: inputTask.value,
+                priority:inputPriority.value || 'medium',
+            };
+            task.unshift(newTask);
+
+            localStorage.setItem("task",JSON.stringify(task));
+        }
+        const savedTask = localStorage.getItem("task");
+
+        if(savedTask){
+            task = JSON.parse(savedTask);
+        }
+        function renderToDOList(taskList){
+            const todoList = document.getElementById("todo-list");
+            for(let i=0; i<taskList.length; i++){
+                const taskObj = task[i];
+
+                todoList.innerHTML +=`
+                <div class="task-card">
+                    <h3 class="task-card-title">${taskObj.task}</h3>
+                    <span>${taskObj.priority}</span>`;
+            }
+        }
+        renderToDOList(task);
+    </script>
+</div>
+</body>
+</html>
